@@ -19,7 +19,7 @@
 [comment]: <> (License along with this program.)
 [comment]: <> (If not, see <https://www.gnu.org/licenses/>.)
 
-# `solidity0.8.26`
+# `solidity0.8.25`
 
 universal recipe for
 [user repo](
