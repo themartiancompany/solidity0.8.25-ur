@@ -174,6 +174,18 @@ validpgpkeys=(
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
 
+prepare() {
+  if [[ "${_os}" == "Android" ]]; then
+    sed \
+      -i \
+      "/add_compile_options(-Wsign-conversion)/a add_compile_options(-Wno-unused-but-set-variable)" \
+      "${srcdir}/${_tarname}/cmake/EthCompilerSettings.cmake"
+    sed \
+      -i \
+      "s%add_compile_options(-Wsign-conversion)%add_compile_options(-Wno-sign-conversion)%" \
+      "${srcdir}/${_tarname}/cmake/EthCompilerSettings.cmake"
+  fi
+}
 
 _boost_version_get() {
   pacman \
