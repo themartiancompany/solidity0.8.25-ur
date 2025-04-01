@@ -47,7 +47,7 @@ _os="$( \
 _offline="false"
 _git="false"
 _pkg="solidity"
-pkgver="0.8.26"
+pkgver="0.8.25"
 pkgname="${_pkg}${pkgver}"
 pkgrel="1"
 pkgdesc="Smart contract programming language."
@@ -124,10 +124,10 @@ _evmfs_network="17000"
 # Holesky EVMFS
 _evmfs_address="0x151920938488F193735e83e052368cD41F9d9362"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-_archive_sum="5d48c9a38e101eb494bc58e20cf3786a8910d89c2ca0073ab04738edd30cf03a"
+_archive_sum="def54b5f8385ef70e102d28321d074e7f3798e9688586452c7939e6733ab273f"
 _evmfs_archive_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sum}"
 _evmfs_archive_src="${_tarname}.tar.gz::${_evmfs_archive_uri}"
-_archive_sig_sum="32ba3924bcc6882b900c53f8fe17390a2f65c217a5ba153f58ecd45d313d4125"
+_archive_sig_sum="885f03b9b92b9d45e5851a1092d0999109b92b21989704df406bee1fe44c9901"
 _archive_sig_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sig_sum}"
 _archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
@@ -219,23 +219,14 @@ _compile() {
   )
   if [[ "${_os}" == "Android" ]]; then
     _cxxflags+=(
+      -Wno-dangling-reference
+      -Wno-dangling-field
+      -Wno-deprecated-declarations
+      -Wno-sign-conversion
+      -Wno-unknown-warning-option
+      -Wno-unqualified-std-cast-call
       -Wno-unused-but-set-variable
     )
-    _boost_version="$( \
-      _boost_version_get)"
-    if _verlt \
-	   "${_boost_version}" \
-	   "1.86.0"; then
-      echo \
-        "Installed boost version" \
-	"<=1.86.0, building with" \
-        "deprecated declarations." \
-        "Also be sure to use Clang" \
-	"<19.x"
-      _cxxflags+=(
-        -Wno-deprecated-declarations
-      )
-    fi
   fi
   _cmake_opts=(
     -D CMAKE_BUILD_TYPE="None"
@@ -251,6 +242,7 @@ _compile() {
     -D TESTS="${_tests}"
     -D USE_LD_GOLD="OFF"
     -D USE_SYSTEM_LIBRARIES="OFF"
+    -DCMAKE_CXX_FLAGS="${_cxxflags[*]}"
     -S "${srcdir}/${_pkg}_${pkgver}/"
     -Wno-dev
   )
