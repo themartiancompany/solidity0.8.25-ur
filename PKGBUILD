@@ -111,9 +111,9 @@ sha256sums=()
 _url="${url}"
 _tag="${pkgver}"
 _tag_name="pkgver"
-_tarname="${pkgname}_${_tag}"
+_tarname="${_pkg}_${_tag}"
 if [[ "${_offline}" == "true" ]]; then
-  _url="file://${HOME}/${pkgname}"
+  _url="file://${HOME}/${_pkg}"
 fi
 # Gnosis mainnet
 # _evmfs_network="100"
